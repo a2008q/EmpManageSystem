@@ -44,4 +44,20 @@ public class DepartmentService {
     public int addMenuByDeptId(Integer dId, Integer mId) {
         return departmentMapper.addMenuByDeptId(dId, mId);
     }
+
+    public int addDepartment(Department department) {
+        return departmentMapper.insertSelective(department);
+    }
+
+    public int updateDepartment(Department department) {
+        return departmentMapper.updateByPrimaryKeySelective(department);
+    }
+
+    public Department getDeptById(Integer id) {
+        return departmentMapper.selectByPrimaryKey(id);
+    }
+
+    public int deleteDeptById(Integer id){
+        return departmentMapper.deleteByPrimaryKey(id);
+    }
 }

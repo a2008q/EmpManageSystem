@@ -80,7 +80,7 @@
 			<!-- 内容主体区 -->
 			<el-form ref="editFormRef" :model="editForm" :rules="editFormRules" label-width="70px">
 				<el-form-item label="Id">
-					<el-input v-model="editForm.empId"></el-input>
+					<el-input v-model="editForm.empId" disabled></el-input>
 				</el-form-item>
 				<el-form-item label="姓名" prop="empName">
 					<el-input v-model="editForm.empName"></el-input>

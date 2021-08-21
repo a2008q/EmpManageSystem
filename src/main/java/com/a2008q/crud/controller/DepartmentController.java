@@ -61,14 +61,44 @@ public class DepartmentController {
         departmentService.deleteAllByDeptId(dId);
         String[] mId = mIds.split("\\D");
 //        System.out.println(dId);
-
         for (String s : mId) {
             if (!s.isEmpty()) {
                 departmentService.addMenuByDeptId(dId, Integer.parseInt(s));
 //                System.out.println(s);
             }
-
         }
+        return Msg.success();
+    }
+
+    @ApiOperation(value = "增加部门", httpMethod = "POST")
+    @RequestMapping(value = "/dept", method = RequestMethod.POST)
+    @ResponseBody
+    public Msg addDept(@RequestBody Department department) {
+        departmentService.addDepartment(department);
+        return Msg.success();
+    }
+
+    @ApiOperation(value = "修改部门", httpMethod = "PUT")
+    @RequestMapping(value = "/dept/{deptId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Msg updateDept(@RequestBody Department department) {
+        departmentService.updateDepartment(department);
+        return Msg.success();
+    }
+
+    @ApiOperation(value = "获取部门信息", httpMethod = "GET")
+    @RequestMapping(value = "/dept/{deptId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Msg getDeptById(@PathVariable("deptId") Integer id) {
+        Department dept = departmentService.getDeptById(id);
+        return Msg.success().add("dept", dept);
+    }
+
+    @ApiOperation(value = "删除", httpMethod = "DELETE")
+    @RequestMapping(value = "/dept/{deptId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public Msg deleteDeptById(@PathVariable("deptId") Integer id) {
+        departmentService.deleteDeptById(id);
         return Msg.success();
     }
 
