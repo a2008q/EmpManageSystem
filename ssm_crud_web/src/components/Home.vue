@@ -4,6 +4,12 @@
 			<div>
 				<span>员工管理系统</span>
 			</div>
+			<el-dropdown>
+				<i class="el-icon-setting" style="text-align: right;display: flex;"></i>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item @click.native="setInfo">设置个人信息</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
 			<el-button type="info" @click='logout'>退出</el-button>
 		</el-header>
 		<el-container>
@@ -11,8 +17,8 @@
 			<el-aside :width="isCollapse?'64px':'200px'">
 				<div class="toggle-button" @click="toggleCollapse">|||</div>
 				<!-- 侧边栏菜单区 -->
-				<el-menu background-color="#333744" text-color="#fff" active-text-color="#409eff" unique-opened
-					:collapse="isCollapse" :collapse-transition="false" router :default-active="activePath">
+				<el-menu ref="menu" background-color="#333744" text-color="#fff" active-text-color="#409eff" unique-opened
+					:collapse="isCollapse" :collapse-transition="false" router :default-active="activePath" @open="saveOpen">
 					<el-submenu :index="item.id+''" v-for="item in menulist" :key="item.id" v-if="item.pid==0">
 						<template slot="title">
 							<i :class="iconObj[item.id]"></i>
@@ -49,9 +55,9 @@
 				iconObj: {
 					'1': 'iconfont icon-user',
 					'4': 'iconfont icon-tijikongjian',
-					'10':'iconfont icon-baobiao'
+					'10': 'iconfont icon-baobiao'
 				},
-				activePath:''
+				activePath: ''
 			}
 		},
 		methods: {
@@ -73,9 +79,17 @@
 			toggleCollapse() {
 				this.isCollapse = !this.isCollapse
 			},
-			saveNavState(activePath){
-				window.sessionStorage.setItem("activePath",activePath)
+			saveNavState(activePath) {
+				window.sessionStorage.setItem("activePath", activePath)
 				this.activePath = activePath
+			},
+			saveOpen(key){
+				window.sessionStorage.setItem("index",key)
+			},
+			setInfo(){
+				this.$refs.menu.close(window.sessionStorage.getItem("index"))
+				this.activePath = ""
+				this.$router.push("/info")
 			}
 		}
 	};
@@ -98,10 +112,16 @@
 		>div {
 			display: flex;
 			align-items: center;
-
 			span {
 				margin-left: 15px;
+				align-content:flex-end;
 			}
+		}
+		.el-dropdown{
+			display: flex;
+			margin-left: auto;
+			color: #fff;
+			margin-right: 15px;
 		}
 	}
 

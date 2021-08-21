@@ -40,6 +40,7 @@
 				if(res.code==100){
 					this.$message.success("登录成功");
 					window.sessionStorage.setItem('name',res.extend.emp.empName);
+					window.sessionStorage.setItem('empId',res.extend.emp.empId);
 					window.sessionStorage.setItem('dId',res.extend.emp.dId);
 					// console.log(res.extend)
 					this.$router.push("/home")

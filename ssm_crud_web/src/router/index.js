@@ -7,6 +7,7 @@ import Users from '../components/user/Users.vue'
 import Departments from '../components/power/Departments.vue'
 import Menus from '../components/power/Menus.vue'
 import Report from '../components/report/Report.vue'
+import Info from '../components/user/Info.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,10 @@ const routes = [{
 			{
 				path: '/reports',
 				component: Report
+			},
+			{
+				path: '/info',
+				component: Info
 			}
 		]
 	},
