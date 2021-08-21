@@ -29,3 +29,12 @@ npm run build
 后端接口:http://127.0.0.1:8081/swagger/index.html#/
 ```
 ![image](https://z3.ax1x.com/2021/08/20/fOM75R.png)
+
+## TODO
+1. 部门增加修改删除
+2. 个人信息界面
+3. 修改邮箱（邮箱验证码）
+4. 修改密码（使用邮箱验证）
+5. token鉴权
+6. 头像上传
+7. 批量导出导入
