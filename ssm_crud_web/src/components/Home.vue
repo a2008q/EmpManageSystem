@@ -55,7 +55,8 @@
 				iconObj: {
 					'1': 'iconfont icon-user',
 					'4': 'iconfont icon-tijikongjian',
-					'10': 'iconfont icon-baobiao'
+					'10': 'iconfont icon-baobiao',
+					'18':'iconfont icon-user'
 				},
 				activePath: ''
 			}

@@ -8,6 +8,7 @@ import Departments from '../components/power/Departments.vue'
 import Menus from '../components/power/Menus.vue'
 import Report from '../components/report/Report.vue'
 import Info from '../components/user/Info.vue'
+import EmpInfo from '../components/user/EmpInfo.vue'
 
 Vue.use(VueRouter)
 
@@ -44,6 +45,9 @@ const routes = [{
 			{
 				path: '/info',
 				component: Info
+			},{
+				path: '/empinfo',
+				component: EmpInfo
 			}
 		]
 	},
