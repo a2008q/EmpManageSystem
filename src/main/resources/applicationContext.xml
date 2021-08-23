@@ -5,6 +5,8 @@
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
@@ -13,15 +15,15 @@
 ">
     <context:component-scan base-package="com.a2008q">
         <context:exclude-filter type="annotation"
-                                expression="org.springframework.stereotype.Controller" />
+                                expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     <!-- Spring的配置文件，这里主要配置和业务逻辑有关的 -->
     <!--=================== 数据源，事务控制，xxx ================-->
     <context:property-placeholder location="classpath:dbconfig.properties"/>
-    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
-        <property name="driverClass" value="${jdbc.driverClass}"></property>
-        <property name="user" value="${jdbc.user}"></property>
+    <bean id="pooledDataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="url" value="${jdbc.jdbcUrl}"></property>
+        <property name="driverClassName" value="${jdbc.driverClass}"></property>
+        <property name="username" value="${jdbc.user}"></property>
         <property name="password" value="${jdbc.password}"></property>
     </bean>
     <!--================== 配置和MyBatis的整合=============== -->
@@ -50,6 +52,7 @@
         <!--控制住数据源  -->
         <property name="dataSource" ref="pooledDataSource"></property>
     </bean>
+
     <!--    添加swagger-->
     <bean class="com.a2008q.crud.config.SwaggerConfig"/>
     <mvc:resources mapping="/swagger/**" location="/swagger/"/>
@@ -72,7 +75,9 @@
     </tx:advice>
 
     <!-- Spring配置文件的核心点（数据源、与mybatis的整合，事务控制） -->
-
-
-
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:use-pool="true"/>
+    <!-- redis template definition -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+          p:connection-factory-ref="jedisConnectionFactory"/>
 </beans>

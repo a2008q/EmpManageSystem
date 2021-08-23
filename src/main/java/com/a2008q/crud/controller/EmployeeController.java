@@ -1,24 +1,22 @@
 package com.a2008q.crud.controller;
 
 import com.a2008q.crud.bean.Employee;
-import com.a2008q.crud.bean.Menu;
 import com.a2008q.crud.bean.Msg;
 import com.a2008q.crud.service.EmployeeService;
+import com.a2008q.crud.utils.MailUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 应用模块名称<p>
@@ -32,6 +30,8 @@ public class EmployeeController {
 
     @Autowired
     EmployeeService employeeService;
+    @Autowired
+    private RedisTemplate<String, String> template;
 
     /**
      * 查询功能
@@ -147,7 +147,7 @@ public class EmployeeController {
     @ApiOperation(value = "添加员工", httpMethod = "POST")
     @RequestMapping(value = "/emp", method = RequestMethod.POST)
     @ResponseBody
-    public Msg saveEmp(@Valid @RequestBody Employee employee, BindingResult result) {
+    public Msg saveEmp(@RequestBody Employee employee, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, Object> map = new HashMap<>();
             List<FieldError> fieldErrors = result.getFieldErrors();
@@ -211,5 +211,32 @@ public class EmployeeController {
     public Msg countDept() {
         List<Map<String, Object>> map = employeeService.countDept();
         return Msg.success().add("cdept", map);
+    }
+
+    @ApiOperation(value = "发送短信", httpMethod = "GET")
+    @RequestMapping("/send")
+    @ResponseBody
+    public Msg sendVerifyEmail(@RequestParam(value = "email") String email) {
+        String code = template.opsForValue().get(email);
+        if (code != null) {
+            return Msg.fail();
+        }
+        code = UUID.randomUUID().toString().substring(0, 6);
+        template.opsForValue().set(email, code, 5, TimeUnit.MINUTES);
+        MailUtils.sendMail(email, "验证码", "您的验证码是:" + code);
+        return Msg.success();
+    }
+
+    @ApiOperation(value = "更换邮箱", httpMethod = "POST")
+    @RequestMapping("/emp/email/{code}")
+    @ResponseBody
+    public Msg changeEmail(@RequestBody Employee employee, @PathVariable("code") String code) {
+        if (code.equals(template.opsForValue().get(employee.getEmail()))) {
+            employeeService.updateEmp(employee);
+            return Msg.success();
+        } else {
+            return Msg.fail().add("error", "验证码错误");
+        }
+
     }
 }
