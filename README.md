@@ -33,6 +33,8 @@ npm run build
 
 ```
 后端接口:http://127.0.0.1:8081/swagger/index.html#/
+数据库文件为ssm_crud.sql
+使用方法 source ssm_crud.sql
 ```
 
 ### 邮件发送需在resource目录配置email.properties
