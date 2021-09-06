@@ -28,6 +28,7 @@ public class MailUtils {
         // 1.创建一个程序与邮件服务器会话对象 Session
         Properties props = new Properties();
         InputStream in = null;
+        System.out.println(new ClassPathResource("email.properties"));
         try {
             in = new ClassPathResource("email.properties").getInputStream();
             props.load(in);

@@ -219,7 +219,7 @@ public class EmployeeController {
     public Msg sendVerifyEmail(@RequestParam(value = "email") String email) {
         String code = template.opsForValue().get(email);
         if (code != null) {
-            return Msg.fail();
+            return Msg.fail().add("error", "验证码未失效");
         }
         code = UUID.randomUUID().toString().substring(0, 6);
         template.opsForValue().set(email, code, 5, TimeUnit.MINUTES);
